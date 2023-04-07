@@ -69,6 +69,8 @@ public class RetirementPageClass extends TestBase{
 	WebElement btnSave;
 	@FindAll({@FindBy(xpath="//span[text()='Input required']")})
 	List<WebElement> MandatoryMessage;
+	@FindBy(xpath="//p[@id='calculator-input-alert-desc' and text()='Please fill out all required fields']")	
+	WebElement ReqFieldMsg;
 String result;
 JavascriptExecutor js = (JavascriptExecutor)driver;
 SoftAssert softAssert = new SoftAssert();
@@ -155,7 +157,7 @@ checkSocSecDetails(sSOA);
 //This method verifies that details entered are present in relevant fields
 public void checkSocSecDetails(String sSOA){
 	newstr=replaceSeperatorInString(socialSecurityOverrideAmount);
-	System.out.println("newstr & sSOA "+newstr+" "+sSOA);
+	//System.out.println("newstr & sSOA "+newstr+" "+sSOA);
 	softAssert.assertEquals(newstr,sSOA);
 	softAssert.assertAll();
 }
@@ -189,22 +191,26 @@ public void mandatoryfieldcheck(){
 	/*if((CurrentAge.getAttribute("value").isEmpty())){
 		System.out.println("Current Age field is empty");
 		}*/
-
-	softAssert.assertNotEquals(CurrentAge.getAttribute("value"),null);
-	System.out.println("Current Age field is not empty");
-	softAssert.assertNotEquals(RetAge.getAttribute("value"),null);
-	System.out.println("Retirement Age field is not empty");
-	softAssert.assertNotEquals(CurrentIncome.getAttribute("value"),null);
-	System.out.println("Current Income field is not empty");
-	softAssert.assertNotEquals(SavingsBalance.getAttribute("value"),null);
-	System.out.println("Savings Balance field is not empty");
-	softAssert.assertNotEquals(AnnualSavings.getAttribute("value"),null);
-	System.out.println("Annual Savings field is not empty");
-	softAssert.assertNotEquals(SavingsRate.getAttribute("value"),null);
-	System.out.println("Savings Rate field is not empty");
-	softAssert.assertAll();
-
-	System.out.println("Mandatory missing fields = "+MandatoryMessage.size());
+	try{
+		softAssert.assertNotEquals(CurrentAge.getAttribute("value"),"");
+		//System.out.println("Current Age field is not empty");
+		softAssert.assertNotEquals(RetAge.getAttribute("value"),"");
+		//System.out.println("Retirement Age field is not empty");
+		softAssert.assertNotEquals(CurrentIncome.getAttribute("value"),"");
+		//System.out.println("Current Income field is not empty");
+		softAssert.assertNotEquals(SavingsBalance.getAttribute("value"),"");
+		//System.out.println("Savings Balance field is not empty");
+		softAssert.assertNotEquals(AnnualSavings.getAttribute("value"),"");
+		//System.out.println("Annual Savings field is not empty");
+		softAssert.assertNotEquals(SavingsRate.getAttribute("value"),"");
+		//System.out.println("Savings Rate field is not empty");
+		softAssert.assertAll();
+		}
+		catch (Error e){
+			Assert.assertTrue(ReqFieldMsg.isDisplayed());
+			System.out.println("Mandatory missing fields = "+MandatoryMessage.size());
+		}
+	
 	/*for(WebElement mf:MandatoryMessage){
 		System.out.println("Fields "+mf.getText());
 		}*/
